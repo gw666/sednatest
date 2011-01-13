@@ -1,0 +1,1 @@
+for $x in doc('books.xml')//book return $x/title/text()
