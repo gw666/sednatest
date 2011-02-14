@@ -1,1 +1,3 @@
-for $x in doc('books.xml')//book return $x/title/text()
+declare default element namespace 'http://infoml.org/infomlFile';
+for $card in doc('clinical-interview-v1_00.xml')/infomlFile/infoml[@cardId = 'gw667_113']
+return $card/selectors/tag

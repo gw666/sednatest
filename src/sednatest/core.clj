@@ -1,5 +1,14 @@
-;; this file implements SimpleQuery.java
+;; gw666 github project sednaquery, file core.clj
 ;; see http://www.cfoster.net/articles/xqj-tutorial/simple-xquery.xml
+
+;; Versions
+
+;; 0.3 reads a set of v1.0 infocards in db named test
+;;   NOTES: 1. reads from "doc('filename')" but not "collection('db-name')"
+;;          2. seems to require ".xml" extension
+;;          3. may not work with filnames containing spaces (unverified)
+
+;; 0.2 implements SimpleQuery.java; commit aa28d6
 
 (ns sednatest.core
   (:gen-class)
@@ -17,6 +26,7 @@
        result-vector
        (recur result-sequence (conj result-vector (.getItemAsString result-sequence (Properties.)))))))
 
+;;insights taken from ~/tech/schemestuff/InfWb/main/sedna-utilities.ss
 (defn -main []
   (let [xqs (SednaXQDataSource.)]
     (doto xqs
@@ -25,7 +35,9 @@
     (let [conn (.getConnection xqs "SYSTEM" "MANAGER")
 	  xqe (.createExpression conn)
 	  xqueryString
-	  "for $x in doc('books.xml')//book return $x/title/text()"
+	  "declare default element namespace 'http://infoml.org/infomlFile';
+for $card in doc('clinical-interview-v1_00.xml')/infomlFile/infoml[@cardId = 'gw667_113']
+return $card/selectors/tag"
 	  rs (.executeQuery xqe xqueryString)
 	  result (get-result rs)]
       (prn result)
