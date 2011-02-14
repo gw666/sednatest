@@ -4,17 +4,18 @@
 (ns sednatest.core
   (:gen-class)
   (:import (javax.xml.xquery XQConnection XQDataSource
-			     XQItemAccessor XQResultSequence)
-	   (net.cfoster.sedna.xqj SednaXQDataSource)))
+			     XQResultSequence)
+	   (net.cfoster.sedna.xqj SednaXQDataSource)
+	   (java.util Properties)))
 
 (defn get-result
   ([result-sequence]
      (get-result result-sequence (vector)))
   ([result-sequence result-vector]
-     (swank.core/break)
+    ; (swank.core/break)
      (if (not  (.next result-sequence))
        result-vector
-       (recur result-sequence (conj result-vector (.getItemAsString result-sequence))))))
+       (recur result-sequence (conj result-vector (.getItemAsString result-sequence (Properties.)))))))
 
 (defn -main []
   (let [xqs (SednaXQDataSource.)]
